@@ -61,4 +61,4 @@ para voz.
 
 ## Licencia
 
-MIT
+MIT, en el archivo [LICENSE](LICENSE).
