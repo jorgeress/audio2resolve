@@ -1,18 +1,20 @@
 # audio2resolve
 
-Convierte audios a WAV PCM para que **DaVinci Resolve en Linux** los importe sin dramas.
+*[Versión en español](README.es.md)*
 
-Resolve en Linux no trae los decodificadores de AAC, así que los `.m4a` y `.mp3`
-que salen de un móvil o de Google Drive se importan mudos, con la duración mal
-o directamente fallan. Este script los pasa a WAV PCM, que Resolve lee de forma
-nativa: sin decodificación, scrubbing instantáneo y sincronía exacta.
+Converts audio to PCM WAV so **DaVinci Resolve on Linux** imports it without a fuss.
 
-## Requisitos
+Resolve on Linux doesn't ship AAC decoders, so the `.m4a` and `.mp3` files
+that come off a phone or Google Drive import silent, with the wrong duration,
+or fail outright. This script converts them to PCM WAV, which Resolve reads
+natively: no decoding, instant scrubbing and exact sync.
+
+## Requirements
 
 - `ffmpeg`
-- `unzip` (solo si le pasas archivos `.zip`)
+- `unzip` (only if you pass it `.zip` files)
 
-## Instalación
+## Installation
 
 ```bash
 curl -o ~/.local/bin/audio2resolve \
@@ -20,45 +22,49 @@ curl -o ~/.local/bin/audio2resolve \
 chmod +x ~/.local/bin/audio2resolve
 ```
 
-Asegúrate de que `~/.local/bin` esté en tu `PATH`.
+Make sure `~/.local/bin` is on your `PATH`.
 
-## Uso
+## Usage
 
 ```bash
-audio2resolve grabacion.m4a          # un archivo
-audio2resolve ~/Downloads/audios/    # todos los audios de una carpeta
-audio2resolve descarga.zip           # descomprime y convierte lo que haya dentro
+audio2resolve recording.m4a          # a single file
+audio2resolve ~/Downloads/audio/     # all the audio in a folder
+audio2resolve download.zip           # unzips and converts whatever is inside
 ```
 
-Sin `-o`, los WAV van a una subcarpeta `wav_resolve/` junto al origen.
-Los originales no se tocan nunca.
+Without `-o`, the WAVs go into a `wav_resolve/` subfolder next to the source.
+The originals are never touched.
 
-## Opciones
+The exit code is 0 if everything converted and 1 if any file failed, so you
+can use it in other scripts.
 
-| Opción | Qué hace |
+## Options
+
+| Option | What it does |
 |---|---|
-| `-o DIR` | Carpeta de salida |
-| `-b 16\|24\|32` | Profundidad de bits (por defecto 24) |
-| `-r HZ` | Frecuencia de muestreo (por defecto, la del original) |
-| `-s` | Fuerza estéreo (por defecto conserva los canales del original) |
-| `-n` | Normaliza a -16 LUFS con `loudnorm`, útil para voz grabada a niveles dispares |
-| `-f` | Rehace los WAV que ya existan (por defecto los omite) |
-| `-h` | Ayuda |
+| `-o DIR` | Output folder |
+| `-b 16\|24\|32` | Bit depth (default 24) |
+| `-r HZ` | Sample rate (default: the original's) |
+| `-s` | Force stereo (default: keep the original channels) |
+| `-n` | Normalize to -16 LUFS with `loudnorm`, handy for voice recorded at uneven levels |
+| `-f` | Redo WAVs that already exist (skipped by default) |
+| `-h` | Help |
 
-Como por defecto omite lo ya convertido, puedes relanzarlo sobre la misma
-carpeta cada vez que añadas material y solo procesará lo nuevo.
+Since it skips what's already converted by default, you can rerun it on the
+same folder every time you add material and it will only process what's new.
 
-## Formatos de entrada
+## Input formats
 
 `m4a`, `mp3`, `aac`, `opus`, `ogg`, `oga`, `wma`, `flac`, `wav`, `aiff`, `aif`
-y vídeos (`mp4`, `mov`, `mkv`, `webm`), de los que extrae la pista de audio.
+and video (`mp4`, `mov`, `mkv`, `webm`), from which it extracts the audio
+track.
 
-## Por qué 24 bits
+## Why 24 bits
 
-Es el estándar de post-producción y le da margen a la mezcla sin que se note en
-el tamaño para pistas cortas. Si te importa el espacio, `-b 16` vale de sobra
-para voz.
+It's the post-production standard and gives the mix headroom without a
+noticeable size cost for short tracks. If space matters to you, `-b 16` is
+plenty for voice.
 
-## Licencia
+## License
 
-MIT, en el archivo [LICENSE](LICENSE).
+MIT, in the [LICENSE](LICENSE) file.
